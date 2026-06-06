@@ -10,7 +10,8 @@ import {
   signInWithPopup, 
   signOut, 
   User, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth, googleProvider, runWithRetry } from '../lib/firebase';
 
@@ -27,6 +28,7 @@ interface AdminState {
   loginWithGoogle: () => Promise<boolean>;
   logout: () => Promise<void>;
   clearError: () => void;
+  sendPasswordReset: (email: string) => Promise<boolean>;
 }
 
 export const useAdminStore = create<AdminState>((set) => ({
@@ -158,6 +160,29 @@ export const useAdminStore = create<AdminState>((set) => ({
   },
 
   clearError: () => set({ error: null }),
+  sendPasswordReset: async (email) => {
+    set({ isLoading: true, error: null });
+    try {
+      await runWithRetry(() => 
+        sendPasswordResetEmail(auth, email)
+      );
+      set({ isLoading: false });
+      return true;
+    } catch (err: any) {
+      let friendlyMessage = 'Failed to send password reset email';
+      if (!navigator.onLine) {
+        friendlyMessage = 'You are currently offline. Please restore connection.';
+      } else if (err.code === 'auth/network-request-failed') {
+        friendlyMessage = 'Network connection timed out. Please check your internet, then retry.';
+      } else if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
+        friendlyMessage = 'No active account found with this email, or the email address is invalid.';
+      } else if (err.message) {
+        friendlyMessage = err.message;
+      }
+      set({ error: friendlyMessage, isLoading: false });
+      return false;
+    }
+  },
 }));
 
 // Initialize active listener immediately for state synchronization

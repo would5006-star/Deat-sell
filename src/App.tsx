@@ -30,17 +30,38 @@ export default function App() {
   
   // Admin Login/Signup Dialog State
   const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot'>('signin');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [loginFormActionLoading, setLoginFormActionLoading] = useState(false);
 
   // Sync state with our unified administrative store
   const { products } = useProductStore();
-  const { user, isAuthenticated, isAdmin, error: authStoreError, login, signup, logout, loginWithGoogle, clearError } = useAdminStore();
+  const { user, isAuthenticated, isAdmin, error: authStoreError, login, signup, logout, loginWithGoogle, clearError, sendPasswordReset } = useAdminStore();
 
   const handleAdminAuthEmail = async (e: FormEvent) => {
     e.preventDefault();
+    
+    if (authMode === 'forgot') {
+      if (!adminEmail.trim()) {
+        toast.error('Email address is required to reset password.');
+        return;
+      }
+      setLoginFormActionLoading(true);
+      const successfullySent = await sendPasswordReset(adminEmail.trim());
+      setLoginFormActionLoading(false);
+      if (successfullySent) {
+        toast.success('Password reset email successfully sent! Please check your inbox or spam folder.', {
+          icon: '📧',
+          duration: 6000,
+        });
+        setAuthMode('signin');
+      } else {
+        toast.error(authStoreError || 'Failed to send password reset email. Please ensure the email is registered.');
+      }
+      return;
+    }
+
     if (!adminEmail.trim() || !adminPassword.trim()) {
       toast.error('Both email and password are required.');
       return;
@@ -277,36 +298,51 @@ export default function App() {
             </button>
 
             {/* Segmented Tab Controls for Sign In vs. Sign Up */}
-            <div className="flex border-b border-white/5 pb-3 mb-4 gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode('signin');
-                  clearError();
-                }}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
-                  authMode === 'signin'
-                    ? 'bg-primary/10 text-primary border border-primary/20'
-                    : 'text-white/40 hover:text-white'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAuthMode('signup');
-                  clearError();
-                }}
-                className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
-                  authMode === 'signup'
-                    ? 'bg-primary/10 text-primary border border-primary/20'
-                    : 'text-white/40 hover:text-white'
-                }`}
-              >
-                Create Account (Sign Up)
-              </button>
-            </div>
+            {authMode === 'forgot' ? (
+              <div className="flex items-center mb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('signin');
+                    clearError();
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-primary hover:underline cursor-pointer"
+                >
+                  <span>&larr; Back to Sign In</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex border-b border-white/5 pb-3 mb-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('signin');
+                    clearError();
+                  }}
+                  className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
+                    authMode === 'signin'
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-white/40 hover:text-white'
+                  }`}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('signup');
+                    clearError();
+                  }}
+                  className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
+                    authMode === 'signup'
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-white/40 hover:text-white'
+                  }`}
+                >
+                  Create Account (Sign Up)
+                </button>
+              </div>
+            )}
 
             <form onSubmit={handleAdminAuthEmail} className="space-y-4">
               <div className="text-center">
@@ -316,12 +352,18 @@ export default function App() {
 
                 <div className="space-y-1 mt-3">
                   <h3 className="font-sans text-base font-extrabold text-white">
-                    {authMode === 'signin' ? 'Member Portal Access' : 'Register Member Account'}
+                    {authMode === 'signin' 
+                      ? 'Member Portal Access' 
+                      : authMode === 'signup' 
+                        ? 'Register Member Account' 
+                        : 'Reset Your Password'}
                   </h3>
                   <p className="text-[10px] uppercase tracking-wide text-white/40 font-semibold">
                     {authMode === 'signin' 
                       ? 'Log in to access your SMM packages, events and blogs'
-                      : 'Create your account to browse premium growth plans'}
+                      : authMode === 'signup'
+                        ? 'Create your account to browse premium growth plans'
+                        : 'Enter your registered email to receive a recovery link'}
                   </p>
                 </div>
               </div>
@@ -355,21 +397,38 @@ export default function App() {
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white/50 uppercase tracking-widest text-[10px] flex items-center gap-1">
-                    <Lock className="h-3 w-3" />
-                    <span>Password</span>
-                  </label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••••••••"
-                    value={adminPassword}
-                    onChange={(e) => setAdminPassword(e.target.value)}
-                    className="w-full rounded-xl bg-bg-dark border border-white/10 px-4 py-3 font-semibold text-white placeholder-white/20 focus:border-primary focus:outline-none"
-                    id="admin-password-input"
-                  />
-                </div>
+                {authMode !== 'forgot' && (
+                  <div className="space-y-1.5">
+                    <label className="font-bold text-white/50 uppercase tracking-widest text-[10px] flex items-center gap-1">
+                      <Lock className="h-3 w-3" />
+                      <span>Password</span>
+                    </label>
+                    <input
+                      type="password"
+                      required={authMode !== 'forgot'}
+                      placeholder="••••••••••••••"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      className="w-full rounded-xl bg-bg-dark border border-white/10 px-4 py-3 font-semibold text-white placeholder-white/20 focus:border-primary focus:outline-none"
+                      id="admin-password-input"
+                    />
+                  </div>
+                )}
+
+                {authMode === 'signin' && (
+                  <div className="flex justify-end pr-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthMode('forgot');
+                        clearError();
+                      }}
+                      className="text-[10px] font-bold text-primary hover:underline hover:text-primary-light transition-all cursor-pointer"
+                    >
+                      Forgot Your Password?
+                    </button>
+                  </div>
+                )}
                 
                 {authStoreError && (
                   <p className="text-xs font-bold text-accent text-center mt-1 text-red-500">{authStoreError}</p>
@@ -386,7 +445,9 @@ export default function App() {
                     ? 'Processing Firebase Authentication...' 
                     : authMode === 'signup' 
                       ? 'Sign Up & Create Account' 
-                      : 'Sign In with Email & Password'}
+                      : authMode === 'forgot'
+                        ? 'Send Password Recovery Link'
+                        : 'Sign In with Email & Password'}
                 </button>
 
                 {/* Secure google sign in button wrapper */}
