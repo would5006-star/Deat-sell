@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Instagram growth and premium engagement service packages offered by Deat Sell",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique document ID" },
+        "title": { "type": "string", "description": "The name of the service package" },
+        "description": { "type": "string", "description": "The details and features included" },
+        "price": { "type": "number", "description": "The price of the package in INR" },
+        "category": { "type": "string", "description": "The category classification of the service" },
+        "deliveryTime": { "type": "string", "description": "Expected timespan for organic delivery" },
+        "image": { "type": "string", "description": "Storage URL or fallback base64 representation" },
+        "enableTimer": { "type": "boolean", "description": "Toggle to display countdown timer" },
+        "expiryDate": { "type": "string", "description": "ISO timestamp for package expiry countdown" },
+        "isChatOnly": { "type": "boolean", "description": "Whether this is active consultation routing" },
+        "instagramLink": { "type": "string", "description": "Instagram DM chat routing link" },
+        "whatsappLink": { "type": "string", "description": "WhatsApp chat routing link" },
+        "messengerLink": { "type": "string", "description": "Facebook Messenger routing link" },
+        "isFeatured": { "type": "boolean", "description": "Whether package is shown on home showcase" }
+      },
+      "required": ["title", "description", "price", "category", "deliveryTime", "image", "enableTimer", "isChatOnly"]
+    },
+    "EventOffer": {
+      "title": "EventOffer",
+      "description": "Promotional events and discount coupon codes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique document ID" },
+        "title": { "type": "string", "description": "The event title" },
+        "description": { "type": "string", "description": "The promotional details" },
+        "discountCode": { "type": "string", "description": "The coupon code to apply at checkout" },
+        "discountPercent": { "type": "number", "description": "Percentage value of the deduction" },
+        "expiryDate": { "type": "string", "description": "ISO timestamp of countdown expiry" },
+        "image": { "type": "string", "description": "Visual header artwork" }
+      },
+      "required": ["title", "description", "discountCode", "discountPercent", "expiryDate", "image"]
+    },
+    "Blog": {
+      "title": "Blog",
+      "description": "Strategy guides and tips (strict 'no-SMM-word' policy)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique document ID" },
+        "title": { "type": "string", "description": "Blog heading" },
+        "content": { "type": "string", "description": "Full Markdown article body" },
+        "excerpt": { "type": "string", "description": "Short search preview snippet" },
+        "category": { "type": "string", "description": "Target blog folder category" },
+        "tags": { "type": "array", "description": "Metadata keywords" },
+        "date": { "type": "string", "description": "ISO publishing timestamp" },
+        "image": { "type": "string", "description": "Article card banner image" },
+        "comments": { "type": "array", "description": "Reader conversations" }
+      },
+      "required": ["title", "content", "excerpt", "category", "tags", "date", "image", "comments"]
+    }
+  },
+  "firestore": {
+    "/products": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Service growth plans database"
+    },
+    "/events": {
+      "schema": { "$ref": "#/entities/EventOffer" },
+      "description": "Active promotional events and timer codes"
+    },
+    "/blogs": {
+      "schema": { "$ref": "#/entities/Blog" },
+      "description": "Blog articles and reader comment nodes"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper to evaluate if the request is initiated by the verified workspace administrator
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "would5006@gmail.com";
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Products collection security gates
+    match /products/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Events collection security gates
+    match /events/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Blogs collection security gates
+    match /blogs/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Font Family Overrule */
+  --font-sans: "Poppins", "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Strict Brand Tone Palette variables mapping */
+  --color-primary: #00C853;
+  --color-secondary: #6200EA;
+  --color-accent: #FF4081;
+  --color-bg-dark: #0F0F0F;
+  --color-surface-dark: #1E1E1E;
+}
+
+/* Custom Scrollbars and Premium Utilities */
+@layer base {
+  body {
+    background-color: #0F0F0F;
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar for premium dark-mode feeling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0F0F0F;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E1E1E;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6200EA;
+  }
+}
+
+/* Custom animation for high-contrast marquee ribbon */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

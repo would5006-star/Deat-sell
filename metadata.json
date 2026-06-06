@@ -1,0 +1,6 @@
+{
+  "name": "Deat Sell",
+  "description": "Premium marketplace for Instagram growth services like followers, likes, views, comments, and engagement boosts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

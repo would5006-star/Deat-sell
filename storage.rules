@@ -1,0 +1,33 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Check if user is logged in as the specified admin
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "would5006@gmail.com";
+    }
+
+    // Products assets
+    match /products/{allPaths=} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Events assets
+    match /events/{allPaths=} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Blogs assets
+    match /blogs/{allPaths=} {
+      allow read: if true;
+      allow write: if isAdmin() || request.auth != null;
+    }
+
+    // Default deny
+    match /{allPaths=} {
+      allow read, write: if false;
+    }
+  }
+}
