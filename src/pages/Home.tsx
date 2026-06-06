@@ -66,10 +66,10 @@ export default function Home({ products, onSelectProduct, onCheckout, onNavigate
           <span>Supreme Instagram Reach Optimization Network</span>
         </div>
 
-        <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] max-w-4xl">
-          UNLEASH SUPREME <br />
+        <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] max-w-4xl uppercase">
+          FREE FOLLOWERS <br />
           <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-            INSTAGRAM DOMINATION
+            LIKE , VIEWS
           </span>
         </h1>
 
