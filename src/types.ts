@@ -28,6 +28,7 @@ export interface EventOffer {
   discountPercent: number;
   expiryDate: string; // ISO date-time string
   image: string; // Base64
+  externalUrl?: string;
 }
 
 export interface Comment {
@@ -47,6 +48,7 @@ export interface Blog {
   date: string; // ISO date-time string
   comments: Comment[];
   image: string; // Base64
+  externalUrl?: string;
 }
 
 export interface AdminSettings {

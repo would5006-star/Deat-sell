@@ -31,8 +31,8 @@ export default function App() {
   // Admin Login/Signup Dialog State
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot'>('signin');
-  const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
+  const [adminEmail, setAdminEmail] = useState('beatbounce181@gmail.com');
+  const [adminPassword, setAdminPassword] = useState('Dayal@123Avijit@123');
   const [loginFormActionLoading, setLoginFormActionLoading] = useState(false);
 
   // Sync state with our unified administrative store

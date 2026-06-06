@@ -26,6 +26,8 @@ export default function ImageUploader({
   const [isUploading, setIsUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [percentProgress, setPercentProgress] = useState<string | null>(null);
+  const [mode, setMode] = useState<'upload' | 'url'>('upload');
+  const [inputUrl, setInputUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Convert Base64 back to raw File Blob (for backup uploads)
@@ -116,9 +118,43 @@ export default function ImageUploader({
 
   return (
     <div className="w-full flex flex-col space-y-2" id="image-uploader-container">
-      <label className="text-xs font-bold text-white/50 uppercase tracking-widest">
-        Product / Announcement Media Header
-      </label>
+      <div className="flex justify-between items-center pb-1">
+        <label className="text-[10px] font-bold text-white/50 uppercase tracking-widest">
+          Product / Announcement Media Header
+        </label>
+        {!currentImage && (
+          <div className="flex bg-white/5 rounded-lg p-0.5 text-[9px] font-bold border border-white/5">
+            <button
+              type="button"
+              onClick={() => {
+                setMode('upload');
+                setErrorMsg(null);
+              }}
+              className={`px-2 py-1 rounded transition-colors ${
+                mode === 'upload' 
+                  ? 'bg-primary text-black' 
+                  : 'text-white/60 hover:text-white'
+              }`}
+            >
+              Upload Local
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode('url');
+                setErrorMsg(null);
+              }}
+              className={`px-2 py-1 rounded transition-colors ${
+                mode === 'url' 
+                  ? 'bg-primary text-black' 
+                  : 'text-white/60 hover:text-white'
+              }`}
+            >
+              Paste Web URL
+            </button>
+          </div>
+        )}
+      </div>
 
       {currentImage ? (
         <div className="relative group rounded-xl overflow-hidden border border-white/10 aspect-video w-full bg-black/40 flex items-center justify-center animate-fade-in">
@@ -136,6 +172,7 @@ export default function ImageUploader({
             <button
               type="button"
               onClick={() => {
+                setInputUrl('');
                 if (onClear) onClear();
               }}
               className="mt-2 rounded-lg bg-accent/20 border border-accent/20 px-3 py-1.5 text-xs font-bold text-[#FF4081] hover:bg-accent/30 transition-colors"
@@ -144,7 +181,7 @@ export default function ImageUploader({
             </button>
           </div>
         </div>
-      ) : (
+      ) : mode === 'upload' ? (
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -185,6 +222,39 @@ export default function ImageUploader({
               </p>
             </div>
           )}
+        </div>
+      ) : (
+        <div className="space-y-3 p-4 rounded-xl border border-white/10 bg-[#1E1E1E] animate-fade-in text-xs">
+          <div className="flex items-center space-x-2">
+            <ImageIcon className="h-4 w-4 text-primary" />
+            <span className="font-bold text-white">Paste Direct Web Image Address</span>
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              placeholder="e.g. https://images.unsplash.com/photo-example"
+              value={inputUrl}
+              onChange={(e) => setInputUrl(e.target.value)}
+              className="flex-1 rounded-xl bg-bg-dark border border-white/10 px-3.5 py-2 text-xs font-semibold text-white focus:border-primary focus:outline-none placeholder-white/20"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (inputUrl.trim()) {
+                  onImageUploaded(inputUrl.trim());
+                  setErrorMsg(null);
+                } else {
+                  setErrorMsg('Please specify a web image URL address before linking.');
+                }
+              }}
+              className="rounded-xl bg-primary px-4 py-2 font-bold text-black hover:opacity-90 transition-all shadow-lg shadow-primary/10"
+            >
+              Apply Link
+            </button>
+          </div>
+          <p className="text-[10px] text-white/40 leading-normal font-medium">
+            Paste direct high-resolution web hyperlinks (e.g. Unsplash, Imgur, CDN paths) to present live banners instantly.
+          </p>
         </div>
       )}
 

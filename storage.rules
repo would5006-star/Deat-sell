@@ -4,7 +4,10 @@ service firebase.storage {
     
     // Check if user is logged in as the specified admin
     function isAdmin() {
-      return request.auth != null && request.auth.token.email == "beatbounce181@gmail.com";
+      return request.auth != null && (
+        request.auth.token.email == "beatbounce181@gmail.com" ||
+        request.auth.uid == "ngtenBp6MSR2XLJ8YHBhdZzNBn53"
+      );
     }
 
     // Products assets

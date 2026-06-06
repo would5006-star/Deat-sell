@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Gift, Copy, Sparkles, AlertCircle, ShoppingBag } from 'lucide-react';
+import { Gift, Copy, Sparkles, AlertCircle, ShoppingBag, ExternalLink } from 'lucide-react';
 import { useEventStore } from '../stores/eventStore';
 import Timer from '../components/Timer';
 import { toast } from 'sonner';

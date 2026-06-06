@@ -68,6 +68,7 @@ export default function AdminPage() {
   const [ePercent, setEPercent] = useState('');
   const [eExpiry, setEExpiry] = useState('');
   const [eImage, setEImage] = useState('');
+  const [eExternalUrl, setEExternalUrl] = useState('');
 
   // 3. Blog Form
   const [bTitle, setBTitle] = useState('');
@@ -76,6 +77,7 @@ export default function AdminPage() {
   const [bCategory, setBCategory] = useState('Instagram Growth');
   const [bTags, setBTags] = useState('');
   const [bImage, setBImage] = useState('');
+  const [bExternalUrl, setBExternalUrl] = useState('');
 
   // SMM rule helper
   const isSMMUsage = (...texts: string[]): boolean => {
@@ -153,6 +155,7 @@ export default function AdminPage() {
       discountPercent: pct,
       expiryDate: new Date(eExpiry).toISOString(),
       image: eImage,
+      externalUrl: eExternalUrl.trim() || undefined,
     });
 
     toast.success('Event campaign published instantly and is live!');
@@ -162,6 +165,7 @@ export default function AdminPage() {
     setEPercent('');
     setEExpiry('');
     setEImage('');
+    setEExternalUrl('');
   };
 
   // Blog Add Submission (applying NO SMM Rule)
@@ -188,6 +192,7 @@ export default function AdminPage() {
       category: bCategory,
       tags: tagsArr,
       image: bImage,
+      externalUrl: bExternalUrl.trim() || undefined,
     });
 
     if (result.success) {
@@ -197,6 +202,7 @@ export default function AdminPage() {
       setBContent('');
       setBTags('');
       setBImage('');
+      setBExternalUrl('');
     } else {
       toast.error(result.error || 'Failed to publish blog.');
     }
@@ -576,6 +582,17 @@ export default function AdminPage() {
                 />
               </div>
 
+              <div className="space-y-1">
+                <label className="font-bold text-white/40 uppercase tracking-wider text-[10px]">Campaign Link / Action URL (Optional)</label>
+                <input
+                  type="url"
+                  placeholder="e.g. https://instagram.com/p/example"
+                  value={eExternalUrl}
+                  onChange={(e) => setEExternalUrl(e.target.value)}
+                  className="w-full rounded-xl bg-bg-dark border border-white/10 px-3.5 py-2.5 font-semibold text-white focus:border-primary focus:outline-none placeholder-white/20"
+                />
+              </div>
+
               <ImageUploader
                 onImageUploaded={(b64) => setEImage(b64)}
                 currentImage={eImage}
@@ -714,6 +731,17 @@ export default function AdminPage() {
                     className="w-full rounded-xl bg-bg-dark border border-white/10 px-3.5 py-2.5 font-semibold text-white focus:border-primary focus:outline-none"
                   />
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-white/40 uppercase tracking-wider text-[10px]">Reference Link / Additional Article URL (Optional)</label>
+                <input
+                  type="url"
+                  placeholder="e.g. https://example.com/deep-dive"
+                  value={bExternalUrl}
+                  onChange={(e) => setBExternalUrl(e.target.value)}
+                  className="w-full rounded-xl bg-bg-dark border border-white/10 px-3.5 py-2.5 font-semibold text-white focus:border-primary focus:outline-none placeholder-white/20"
+                />
               </div>
 
               <ImageUploader
