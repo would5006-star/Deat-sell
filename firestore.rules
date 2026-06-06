@@ -4,7 +4,7 @@ service cloud.firestore {
     
     // Helper to evaluate if the request is initiated by the verified workspace administrator
     function isAdmin() {
-      return request.auth != null && request.auth.token.email == "would5006@gmail.com";
+      return request.auth != null && request.auth.token.email == "beatbounce181@gmail.com";
     }
 
     // Default deny catch-all

@@ -73,7 +73,7 @@ export default function App() {
       setLoginFormActionLoading(false);
 
       if (successfullyRegistered) {
-        const isRegUserAdmin = adminEmail.trim().toLowerCase() === 'would5006@gmail.com';
+        const isRegUserAdmin = adminEmail.trim().toLowerCase() === 'beatbounce181@gmail.com';
         toast.success(isRegUserAdmin ? 'Account Created! Welcome to the Admin Terminal.' : 'Account Created! Welcome to Deat Sell.', {
           icon: '✨',
           duration: 3000,
@@ -89,7 +89,7 @@ export default function App() {
       setLoginFormActionLoading(false);
 
       if (successfullyAuthenticated) {
-        const isLoginUserAdmin = adminEmail.trim().toLowerCase() === 'would5006@gmail.com';
+        const isLoginUserAdmin = adminEmail.trim().toLowerCase() === 'beatbounce181@gmail.com';
         toast.success(isLoginUserAdmin ? 'Access Granted! Opening Admin Terminal...' : 'Login Successful! Welcome to your Portal.', {
           icon: isLoginUserAdmin ? '🔑' : '✨',
           duration: 3000,

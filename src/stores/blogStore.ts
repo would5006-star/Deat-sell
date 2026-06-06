@@ -114,7 +114,7 @@ export const useBlogStore = create<BlogState>((set, get) => {
 
       // Seeding only if authenticated Administrator loaded the panel
       const currentUser = auth.currentUser;
-      if (currentUser && currentUser.email?.toLowerCase() === 'would5006@gmail.com') {
+      if (currentUser && currentUser.email?.toLowerCase() === 'beatbounce181@gmail.com') {
         console.log('Verified Administrator authenticated. Seeding Firestore blogs collection...');
         try {
           const seeds = getSeededBlogs();

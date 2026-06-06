@@ -70,7 +70,7 @@ export const useEventStore = create<EventState>((set) => {
 
       // Admin auto-seeding
       const currentUser = auth.currentUser;
-      if (currentUser && currentUser.email?.toLowerCase() === 'would5006@gmail.com') {
+      if (currentUser && currentUser.email?.toLowerCase() === 'beatbounce181@gmail.com') {
         console.log('Verified Administrator authenticated. Seeding Firestore events collection...');
         try {
           const seeds = getSeededEvents();

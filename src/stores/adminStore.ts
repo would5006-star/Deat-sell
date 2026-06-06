@@ -39,7 +39,7 @@ export const useAdminStore = create<AdminState>((set) => ({
   error: null,
 
   setUser: (user: User | null) => {
-    const isUserAdmin = user?.email?.toLowerCase() === 'would5006@gmail.com';
+    const isUserAdmin = user?.email?.toLowerCase() === 'beatbounce181@gmail.com';
     set({
       user,
       isAuthenticated: !!user,
@@ -55,7 +55,7 @@ export const useAdminStore = create<AdminState>((set) => ({
       const userCredential = await runWithRetry(() => 
         signInWithEmailAndPassword(auth, email, password)
       );
-      const isUserAdmin = userCredential.user.email?.toLowerCase() === 'would5006@gmail.com';
+      const isUserAdmin = userCredential.user.email?.toLowerCase() === 'beatbounce181@gmail.com';
       set({ 
         user: userCredential.user,
         isAuthenticated: true,
@@ -85,7 +85,7 @@ export const useAdminStore = create<AdminState>((set) => ({
       const userCredential = await runWithRetry(() => 
         createUserWithEmailAndPassword(auth, email, password)
       );
-      const isUserAdmin = userCredential.user.email?.toLowerCase() === 'would5006@gmail.com';
+      const isUserAdmin = userCredential.user.email?.toLowerCase() === 'beatbounce181@gmail.com';
       set({
         user: userCredential.user,
         isAuthenticated: true,
@@ -117,7 +117,7 @@ export const useAdminStore = create<AdminState>((set) => ({
       const result = await runWithRetry(() => 
         signInWithPopup(auth, googleProvider)
       );
-      const isUserAdmin = result.user.email?.toLowerCase() === 'would5006@gmail.com';
+      const isUserAdmin = result.user.email?.toLowerCase() === 'beatbounce181@gmail.com';
       set({
         user: result.user,
         isAuthenticated: true,

@@ -195,7 +195,7 @@ export const useProductStore = create<ProductState>((set, get) => {
 
       // Remote writes are ONLY triggered when the designated Admin operates
       const currentUser = auth.currentUser;
-      if (currentUser && currentUser.email?.toLowerCase() === 'would5006@gmail.com') {
+      if (currentUser && currentUser.email?.toLowerCase() === 'beatbounce181@gmail.com') {
         console.log('Verified Administrator authenticated. Seeding Firestore products collection...');
         try {
           const seeds = getSeededProducts();
