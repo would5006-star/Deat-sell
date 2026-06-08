@@ -103,19 +103,33 @@ export default function EventsPage({ onNavigate }: EventsPageProps) {
                 </div>
 
                 {/* Additional Discount Highlight */}
-                <div className="flex items-center justify-between pt-1 mt-auto">
-                  <div className="flex items-center space-x-2 text-xs font-bold text-white/50">
-                    <Gift className="h-4 w-4 text-accent" />
-                    <span>Unlocks <span className="text-white font-extrabold">{evt.discountPercent}% OFF</span> orders</span>
+                <div className="flex flex-col gap-3.5 pt-1 mt-auto">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 text-xs font-bold text-white/50">
+                      <Gift className="h-4 w-4 text-accent" />
+                      <span>Unlocks <span className="text-white font-extrabold">{evt.discountPercent}% OFF</span> orders</span>
+                    </div>
+
+                    <button
+                      onClick={() => onNavigate('services')}
+                      className="flex items-center space-x-1 rounded-lg text-xs font-bold text-primary hover:underline hover:text-primary/95"
+                    >
+                      <ShoppingBag className="h-3 w-3" />
+                      <span>View eligible packages</span>
+                    </button>
                   </div>
 
-                  <button
-                    onClick={() => onNavigate('services')}
-                    className="flex items-center space-x-1 rounded-lg text-xs font-bold text-primary hover:underline hover:text-primary/95"
-                  >
-                    <ShoppingBag className="h-3 w-3" />
-                    <span>View eligible packages</span>
-                  </button>
+                  {evt.externalUrl && (
+                    <a
+                      href={evt.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center space-x-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-bold text-white hover:bg-white/10 hover:border-primary/20 transition-all w-full mt-1"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5 text-primary" />
+                      <span>Visit Campaign Page / Action Link</span>
+                    </a>
+                  )}
                 </div>
 
               </div>

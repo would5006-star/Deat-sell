@@ -4,7 +4,7 @@
  */
 
 import React, { useState, FormEvent } from 'react';
-import { BookOpen, User, Calendar, MessageSquare, ArrowLeft, Send, Hash, Sparkles } from 'lucide-react';
+import { BookOpen, User, Calendar, MessageSquare, ArrowLeft, Send, Hash, Sparkles, ExternalLink } from 'lucide-react';
 import { useBlogStore } from '../stores/blogStore';
 import { Blog } from '../types';
 import { format } from 'date-fns';
@@ -107,6 +107,20 @@ export default function BlogPage() {
               <div className="border-t border-white/5 pt-6 text-sm text-white/80 leading-relaxed space-y-4 font-normal whitespace-pre-wrap">
                 {selectedBlog.content}
               </div>
+
+              {selectedBlog.externalUrl && (
+                <div className="pt-4 border-t border-white/5 flex">
+                  <a
+                    href={selectedBlog.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-1.5 rounded-xl border border-white/10 bg-white/5 px-4.5 py-2.5 text-xs font-bold text-white hover:bg-white/10 hover:border-primary/25 transition-all"
+                  >
+                    <ExternalLink className="h-4 w-4 text-primary" />
+                    <span>Explore External Blueprint Link</span>
+                  </a>
+                </div>
+              )}
 
               {/* Tags labels line */}
               {selectedBlog.tags && selectedBlog.tags.length > 0 && (
@@ -273,9 +287,22 @@ export default function BlogPage() {
                         <span>Read Blueprint</span>
                       </button>
 
-                      <span className="text-[10px] font-mono text-white/35 uppercase">
-                        {blog.comments.length} Commits
-                      </span>
+                      {blog.externalUrl ? (
+                        <a
+                          href={blog.externalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center space-x-1.5 text-white/70 hover:text-primary transition-colors hover:underline text-xs"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 text-primary" />
+                          <span>Link</span>
+                        </a>
+                      ) : (
+                        <span className="text-[10px] font-mono text-white/35 uppercase">
+                          {blog.comments.length} Commits
+                        </span>
+                      )}
                     </div>
 
                   </div>
