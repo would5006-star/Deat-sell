@@ -163,12 +163,22 @@ export const useBlogStore = create<BlogState>((set, get) => {
 
       try {
         const img = newBlog.image || generateGradientPlaceholder(newBlog.title, newBlog.category || 'Blog', 1);
-        await runWithRetry(() => addDoc(collectionRef, {
-          ...newBlog,
+        // Clean undefined fields since Firestore does not like undefined values
+        const blogData: any = {
+          title: newBlog.title,
+          excerpt: newBlog.excerpt,
+          content: newBlog.content,
+          category: newBlog.category,
+          tags: newBlog.tags,
           image: img,
           date: new Date().toISOString(),
           comments: []
-        }));
+        };
+        if (newBlog.externalUrl !== undefined) {
+          blogData.externalUrl = newBlog.externalUrl;
+        }
+
+        await runWithRetry(() => addDoc(collectionRef, blogData));
         return { success: true };
       } catch (error) {
         handleFirestoreError(error, OperationType.CREATE, 'blogs');
@@ -196,10 +206,16 @@ export const useBlogStore = create<BlogState>((set, get) => {
 
       try {
         const docRef = doc(db, 'blogs', id);
-        await runWithRetry(() => updateDoc(docRef, {
-          ...updatedFields,
+        const blogData: any = {
           updatedAt: new Date().toISOString()
-        }));
+        };
+        Object.entries(updatedFields).forEach(([key, val]) => {
+          if (val !== undefined) {
+            blogData[key] = val;
+          }
+        });
+
+        await runWithRetry(() => updateDoc(docRef, blogData));
         return { success: true };
       } catch (error) {
         handleFirestoreError(error, OperationType.UPDATE, `blogs/${id}`);

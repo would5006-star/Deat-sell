@@ -33,7 +33,8 @@
         "discountCode": { "type": "string", "description": "The coupon code to apply at checkout" },
         "discountPercent": { "type": "number", "description": "Percentage value of the deduction" },
         "expiryDate": { "type": "string", "description": "ISO timestamp of countdown expiry" },
-        "image": { "type": "string", "description": "Visual header artwork" }
+        "image": { "type": "string", "description": "Visual header artwork" },
+        "externalUrl": { "type": "string", "description": "Optional Campaign link or Action URL" }
       },
       "required": ["title", "description", "discountCode", "discountPercent", "expiryDate", "image"]
     },
@@ -50,7 +51,8 @@
         "tags": { "type": "array", "description": "Metadata keywords" },
         "date": { "type": "string", "description": "ISO publishing timestamp" },
         "image": { "type": "string", "description": "Article card banner image" },
-        "comments": { "type": "array", "description": "Reader conversations" }
+        "comments": { "type": "array", "description": "Reader conversations" },
+        "externalUrl": { "type": "string", "description": "Optional external resource or deep-dive link" }
       },
       "required": ["title", "content", "excerpt", "category", "tags", "date", "image", "comments"]
     }

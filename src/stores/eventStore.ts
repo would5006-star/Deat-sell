@@ -101,11 +101,21 @@ export const useEventStore = create<EventState>((set) => {
     addEvent: async (newEvt) => {
       try {
         const img = newEvt.image || generateGradientPlaceholder(newEvt.title, 'Events', 2);
-        await runWithRetry(() => addDoc(collectionRef, {
-          ...newEvt,
+        // Clean undefined fields since Firestore does not like undefined values
+        const eventData: any = {
+          title: newEvt.title,
+          description: newEvt.description,
+          discountCode: newEvt.discountCode,
+          discountPercent: newEvt.discountPercent,
+          expiryDate: newEvt.expiryDate,
           image: img,
           createdAt: new Date().toISOString()
-        }));
+        };
+        if (newEvt.externalUrl !== undefined) {
+          eventData.externalUrl = newEvt.externalUrl;
+        }
+
+        await runWithRetry(() => addDoc(collectionRef, eventData));
       } catch (error) {
         handleFirestoreError(error, OperationType.CREATE, 'events');
       }
@@ -114,10 +124,16 @@ export const useEventStore = create<EventState>((set) => {
     updateEvent: async (id, updatedFields) => {
       try {
         const docRef = doc(db, 'events', id);
-        await runWithRetry(() => updateDoc(docRef, {
-          ...updatedFields,
+        const eventData: any = {
           updatedAt: new Date().toISOString()
-        }));
+        };
+        Object.entries(updatedFields).forEach(([key, val]) => {
+          if (val !== undefined) {
+            eventData[key] = val;
+          }
+        });
+
+        await runWithRetry(() => updateDoc(docRef, eventData));
       } catch (error) {
         handleFirestoreError(error, OperationType.UPDATE, `events/${id}`);
       }
